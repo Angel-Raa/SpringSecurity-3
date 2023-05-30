@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- *  Tabla de Use
+ *  Tabla de User
  */
 @Builder
 @Data
@@ -21,7 +21,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "user_db")
-public class User implements Serializable {
+public class UserModels implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

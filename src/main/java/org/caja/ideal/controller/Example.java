@@ -4,11 +4,12 @@ import jakarta.validation.Valid;
 import org.caja.ideal.controller.requestDTO.UserDTo;
 import org.caja.ideal.models.Role;
 import org.caja.ideal.models.Roles;
-import org.caja.ideal.models.User;
+import org.caja.ideal.models.UserModels;
 import org.caja.ideal.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class Example {
+    @Autowired
+    private BCryptPasswordEncoder encoder;
     @Autowired
     private IUserRepository repository;
     @GetMapping("/hello")
@@ -33,13 +36,13 @@ public class Example {
                         .name(Roles.valueOf(rol))
                         .build())
                 .collect(Collectors.toSet());
-        User user = User.builder()
+        UserModels userModels = UserModels.builder()
                 .email(userDTo.getEmail())
-                .passaword(userDTo.getPassword())
+                .passaword(encoder.encode(userDTo.getPassword()))
                 .username(userDTo.getUsername())
                 .roles(role)
                 .build();
-        repository.save(user);
+        repository.save(userModels);
         return new ResponseEntity<>("Usuario creado con exitos ", HttpStatus.CREATED);
 
     }
